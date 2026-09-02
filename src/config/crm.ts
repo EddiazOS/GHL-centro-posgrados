@@ -87,6 +87,15 @@ export const sendLeadToGHL = async (data: LeadPayload): Promise<{ success: boole
       }).catch((err) => console.warn("Aviso envío CRM GHL:", err));
     }
 
+    // Notificar a la ventana contenedora de GoHighLevel para disparar eventos de conversión/píxel
+    try {
+      if (typeof window !== "undefined" && window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: "GHL_LEAD_SUBMITTED", lead: payload }, "*");
+      }
+    } catch {
+      // Ignorar si hay políticas de origen restringidas
+    }
+
     // Almacenamos localmente el último lead enviado para evitar duplicidades
     try {
       localStorage.setItem("ultimo_lead_posgrados_udc", JSON.stringify(payload));
