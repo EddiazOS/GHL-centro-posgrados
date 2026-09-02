@@ -1,33 +1,4 @@
-export interface PosgradoInfo {
-  id: number;
-  slug: string;
-  title: string;
-  level: string;
-  faculty: string;
-  snies: string;
-  resolucionMen: string;
-  vigencia: string;
-  tituloOtorgado: string;
-  creditos: string;
-  duracion: string;
-  jornada: string;
-  modalidad: string;
-  sede: string;
-  valorMatricula: string;
-  mallaUrl: string;
-  smaLink: string;
-  contactoEmail: string;
-  axiologicos?: string;
-  objetivos?: string;
-  resultados?: string;
-  dirigidoA?: string;
-  perfiles?: string;
-  lineasInvestigacion?: string;
-  dobleTitulacion?: string;
-  requisitos?: string;
-}
-
-export const POSGRADOS_DATA: PosgradoInfo[] = [
+export const POSGRADOS_DATA = [
   {
     "id": 1,
     "slug": "01-doctorado-en-administracion",
@@ -453,9 +424,9 @@ export const POSGRADOS_DATA: PosgradoInfo[] = [
     "slug": "16-maestria-en-gerencia-del-talento-humano",
     "title": "Maestría en Gerencia del Talento Humano",
     "level": "Maestría",
-    "faculty": "",
-    "snies": "En trámite",
-    "resolucionMen": "Registro Calificado MEN",
+    "faculty": "Facultad de Ciencias Económicas",
+    "snies": "109845",
+    "resolucionMen": "Res. 013728 del 22 de julio de 2021 del MEN",
     "vigencia": "7 años",
     "tituloOtorgado": "Maestría en Gerencia del Talento Humano",
     "creditos": "Consultar resolución",
@@ -2325,6 +2296,3 @@ export const POSGRADOS_DATA: PosgradoInfo[] = [
     "requisitos": "Requisitos para Estudiantes Nacionales\n»\nRegistro Médico.\n»\nCertificado de servicio social obligatorio.\n»\nInscripción y realizar proceso de admisión.\nRequisitos para Estudiantes Extranjeros\n»\nTítulo de médico Convalidado por el MEN.\n»\nCertificado de servicio social obligatorio.\n»\nInscripción y realizar proceso de admisión."
   }
 ];
-
-export const POSGRADOS_BY_SLUG: Record<string, PosgradoInfo> = Object.fromEntries(POSGRADOS_DATA.map(p => [p.slug, p]));
-export const POSGRADOS_BY_ID: Record<number, PosgradoInfo> = Object.fromEntries(POSGRADOS_DATA.map(p => [p.id, p]));
