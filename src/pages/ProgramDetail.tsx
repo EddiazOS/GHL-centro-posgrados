@@ -548,11 +548,11 @@ const ProgramDetailPage = () => {
                       <GraduationCap className="w-5 h-5 text-purple-800" />{" "}
                       Líneas de Investigación
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="space-y-2.5">
                       {program.detail.linesOfResearch.map((line) => (
                         <div
                           key={line}
-                          className="flex items-center gap-2.5 bg-white/80 backdrop-blur-sm p-3 rounded-xl border border-purple-100/60 shadow-sm"
+                          className="flex items-center gap-2.5 bg-white/80 backdrop-blur-sm p-3.5 rounded-xl border border-purple-100/60 shadow-sm"
                         >
                           <CheckCircle2 className="w-4 h-4 text-purple-600 shrink-0" />
                           <span className="text-sm font-semibold text-gray-800">
@@ -564,7 +564,8 @@ const ProgramDetailPage = () => {
                   </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Perfiles en columna simple (Full Width) */}
+                <div className="space-y-6">
                   {[
                     {
                       title: "Perfil del Aspirante",
@@ -585,19 +586,34 @@ const ProgramDetailPage = () => {
                         <div className="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center text-purple-700">
                           {icon}
                         </div>
-                        <h3 className="font-bold text-gray-900">{title}</h3>
+                        <h3 className="font-bold text-gray-900 text-lg">{title}</h3>
                       </div>
-                      <ul className="space-y-2">
-                        {items.map((item) => (
-                          <li
-                            key={item}
-                            className="flex items-start gap-2 text-sm text-gray-600"
-                          >
-                            <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="space-y-2.5">
+                        {items.map((item, idx) => {
+                          const isSubtitle =
+                            item.endsWith(":") ||
+                            (item.length < 35 && !item.endsWith("."));
+                          if (isSubtitle) {
+                            return (
+                              <h4
+                                key={idx}
+                                className="font-bold text-gray-900 text-sm sm:text-base pt-3 first:pt-0"
+                              >
+                                {item}
+                              </h4>
+                            );
+                          }
+                          return (
+                            <div
+                              key={idx}
+                              className="flex items-start gap-2.5 text-sm text-gray-600 leading-relaxed"
+                            >
+                              <CheckCircle2 className="w-4 h-4 text-purple-500 mt-1 shrink-0" />
+                              <span>{item}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -619,13 +635,11 @@ const ProgramDetailPage = () => {
                   </p>
                 </div>
 
-                {/* ── Acordeones de contenido del programa ── */}
+                {/* ── Acordeones de contenido adicional del programa ── */}
                 {(program.detail?.axiologicos ||
                   program.detail?.objetivos ||
                   program.detail?.resultados ||
-                  program.detail?.dirigidoA ||
-                  program.detail?.perfiles ||
-                  program.detail?.lineasInvestigacion) && (
+                  program.detail?.dirigidoA) && (
                   <Accordion
                     type="multiple"
                     className="w-full border border-gray-200 rounded-2xl bg-white px-2"
@@ -636,31 +650,41 @@ const ProgramDetailPage = () => {
                           Principios Axiológicos
                         </AccordionTrigger>
                         <AccordionContent className="px-4 text-gray-600 leading-relaxed">
-                          <ul className="space-y-2">
-                            {program.detail.axiologicos.map((item, i) => (
-                              <li key={i} className="flex items-start gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
+                          <div className="space-y-2.5">
+                            {program.detail.axiologicos.map((item, i) => {
+                              const isSub = item.endsWith(":") || (item.length < 35 && !item.endsWith("."));
+                              return isSub ? (
+                                <h4 key={i} className="font-bold text-gray-900 text-sm pt-2 first:pt-0">{item}</h4>
+                              ) : (
+                                <div key={i} className="flex items-start gap-2 text-sm">
+                                  <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
+                                  <span>{item}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </AccordionContent>
                       </AccordionItem>
                     )}
                     {program.detail?.objetivos && (
                       <AccordionItem value="objetivos">
                         <AccordionTrigger className="text-base font-bold text-gray-900 hover:no-underline px-4">
-                          Objetivos
+                          Objetivos Específicos
                         </AccordionTrigger>
                         <AccordionContent className="px-4 text-gray-600 leading-relaxed">
-                          <ul className="space-y-2">
-                            {program.detail.objetivos.map((item, i) => (
-                              <li key={i} className="flex items-start gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
+                          <div className="space-y-2.5">
+                            {program.detail.objetivos.map((item, i) => {
+                              const isSub = item.endsWith(":") || (item.length < 35 && !item.endsWith("."));
+                              return isSub ? (
+                                <h4 key={i} className="font-bold text-gray-900 text-sm pt-2 first:pt-0">{item}</h4>
+                              ) : (
+                                <div key={i} className="flex items-start gap-2 text-sm">
+                                  <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
+                                  <span>{item}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </AccordionContent>
                       </AccordionItem>
                     )}
@@ -670,14 +694,19 @@ const ProgramDetailPage = () => {
                           Resultados de Aprendizaje
                         </AccordionTrigger>
                         <AccordionContent className="px-4 text-gray-600 leading-relaxed">
-                          <ul className="space-y-2">
-                            {program.detail.resultados.map((item, i) => (
-                              <li key={i} className="flex items-start gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
+                          <div className="space-y-2.5">
+                            {program.detail.resultados.map((item, i) => {
+                              const isSub = item.endsWith(":") || (item.length < 35 && !item.endsWith("."));
+                              return isSub ? (
+                                <h4 key={i} className="font-bold text-gray-900 text-sm pt-2 first:pt-0">{item}</h4>
+                              ) : (
+                                <div key={i} className="flex items-start gap-2 text-sm">
+                                  <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
+                                  <span>{item}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </AccordionContent>
                       </AccordionItem>
                     )}
@@ -687,50 +716,19 @@ const ProgramDetailPage = () => {
                           Dirigido a
                         </AccordionTrigger>
                         <AccordionContent className="px-4 text-gray-600 leading-relaxed">
-                          <ul className="space-y-2">
-                            {program.detail.dirigidoA.map((item, i) => (
-                              <li key={i} className="flex items-start gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
-                        </AccordionContent>
-                      </AccordionItem>
-                    )}
-                    {program.detail?.perfiles && (
-                      <AccordionItem value="perfiles">
-                        <AccordionTrigger className="text-base font-bold text-gray-900 hover:no-underline px-4">
-                          Perfiles
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 text-gray-600 leading-relaxed">
-                          <ul className="space-y-2">
-                            {program.detail.perfiles.map((item, i) => (
-                              <li key={i} className="flex items-start gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
-                        </AccordionContent>
-                      </AccordionItem>
-                    )}
-                    {program.detail?.lineasInvestigacion && (
-                      <AccordionItem value="lineasInvestigacion">
-                        <AccordionTrigger className="text-base font-bold text-gray-900 hover:no-underline px-4">
-                          Líneas de Investigación
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 text-gray-600 leading-relaxed">
-                          <ul className="space-y-2">
-                            {program.detail.lineasInvestigacion.map(
-                              (item, i) => (
-                                <li key={i} className="flex items-start gap-2">
+                          <div className="space-y-2.5">
+                            {program.detail.dirigidoA.map((item, i) => {
+                              const isSub = item.endsWith(":") || (item.length < 35 && !item.endsWith("."));
+                              return isSub ? (
+                                <h4 key={i} className="font-bold text-gray-900 text-sm pt-2 first:pt-0">{item}</h4>
+                              ) : (
+                                <div key={i} className="flex items-start gap-2 text-sm">
                                   <CheckCircle2 className="w-4 h-4 text-purple-500 mt-0.5 shrink-0" />
-                                  {item}
-                                </li>
-                              ),
-                            )}
-                          </ul>
+                                  <span>{item}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </AccordionContent>
                       </AccordionItem>
                     )}
