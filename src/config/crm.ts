@@ -53,6 +53,15 @@ export const sendLeadToGHL = async (data: LeadPayload): Promise<{ success: boole
       email: data.email,
       phone: data.phone,
       notes: data.message || "Interesado en información y admisiones de posgrado",
+      programa_posgrado: data.programName || "General",
+      facultad_posgrado: data.faculty || "",
+      nivel_formacion: data.level || "",
+      codigo_snies: data.snies || "",
+      malla_curricular_url: data.mallaUrl || "",
+      sma_convocatoria_link: data.smaLink || "",
+      origen_canal: data.channel || "web-form",
+      pagina_origen: typeof window !== "undefined" ? window.location.href : "",
+      ...utms,
       custom_fields: {
         programa_posgrado: data.programName || "General",
         facultad_posgrado: data.faculty || "",
@@ -75,16 +84,19 @@ export const sendLeadToGHL = async (data: LeadPayload): Promise<{ success: boole
       created_at: new Date().toISOString(),
     };
 
-    // Si hay webhook configurado, enviamos mediante fetch (con mode no-cors si el endpoint de GHL tiene restricción CORS)
+    // Envío directo al webhook de GoHighLevel (LeadConnector soporta CORS)
     if (CRM_CONFIG.ghlWebhookUrl) {
-      fetch(CRM_CONFIG.ghlWebhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-        mode: "no-cors", // Permite envío seguro a endpoints de GHL sin bloqueos por CORS en el cliente
-      }).catch((err) => console.warn("Aviso envío CRM GHL:", err));
+      try {
+        await fetch(CRM_CONFIG.ghlWebhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch (fetchErr) {
+        console.warn("Aviso fetch webhook GHL:", fetchErr);
+      }
     }
 
     // Notificar a la ventana contenedora de GoHighLevel para disparar eventos de conversión/píxel
