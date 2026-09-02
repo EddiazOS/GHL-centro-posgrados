@@ -10,9 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { CRM_CONFIG, sendLeadToGHL } from "@/config/crm";
 
 export const WhatsAppButton = () => {
   const [open, setOpen] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,12 +22,27 @@ export const WhatsAppButton = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const waNumber = "573000000000"; // Número de ejemplo
-    const text = `Hola, mi nombre es ${formData.name}.%0A%0AMi correo: ${formData.email}%0A%0AMensaje:%0A${formData.message}`;
-    window.open(`https://wa.me/${waNumber}?text=${text}`, "_blank");
+    setIsSending(true);
+
+    // 1. Guardar prospecto en el CRM GoHighLevel
+    await sendLeadToGHL({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      message: formData.message,
+      channel: "whatsapp-agustina",
+    });
+
+    // 2. Abrir WhatsApp oficial con mensaje contextual
+    const waNumber = CRM_CONFIG.whatsappNumber;
+    const msgText = `Hola Agustina, mi nombre es ${formData.name}. Estoy interesado en recibir asesoría sobre posgrados de la Universidad de Cartagena.\n\n*Correo:* ${formData.email}\n*Mensaje:* ${formData.message || "Quisiera información de fechas y requisitos."}`;
+    const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msgText)}`;
+    
+    setIsSending(false);
     setOpen(false);
+    window.open(url, "_blank");
   };
 
   return (
@@ -100,9 +117,10 @@ export const WhatsAppButton = () => {
           </div>
           <Button
             type="submit"
-            className="w-full bg-[#87b819] hover:bg-[#7aa617] text-white"
+            disabled={isSending}
+            className="w-full bg-[#87b819] hover:bg-[#7aa617] text-white disabled:opacity-50"
           >
-            Iniciar chat en WhatsApp
+            {isSending ? "Conectando con Agustina..." : "Iniciar chat en WhatsApp"}
           </Button>
         </form>
       </DialogContent>

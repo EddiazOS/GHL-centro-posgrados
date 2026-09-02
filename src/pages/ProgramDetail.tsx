@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { FooterSection } from "@/components/FooterSection";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { sendLeadToGHL } from "@/config/crm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Accordion,
@@ -167,6 +168,7 @@ const ProgramDetailPage = () => {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const program = useMemo(() => programs.find((p) => p.slug === slug), [slug]);
 
@@ -245,8 +247,23 @@ const ProgramDetailPage = () => {
     .filter((p) => p.faculty === program.faculty && p.slug !== program.slug)
     .slice(0, 3);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    await sendLeadToGHL({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      message: formData.message,
+      programName: program.name,
+      faculty: program.faculty,
+      level: program.type,
+      snies: program.snies,
+      mallaUrl: program.mallaUrl,
+      smaLink: program.smaLink,
+      channel: "web-form",
+    });
+    setIsSubmitting(false);
     setSubmitted(true);
   };
 
@@ -1054,10 +1071,11 @@ const ProgramDetailPage = () => {
                     />
                     <Button
                       type="submit"
-                      className="w-full h-12 rounded-xl font-bold text-black hover:opacity-90"
+                      disabled={isSubmitting}
+                      className="w-full h-12 rounded-xl font-bold text-black hover:opacity-90 disabled:opacity-50 transition-opacity"
                       style={{ backgroundColor: "#f1b434" }}
                     >
-                      Enviar solicitud
+                      {isSubmitting ? "Enviando solicitud..." : "Enviar solicitud"}
                     </Button>
                     {(program.isOpenForRegistration &&
                       program.registrationLink) ||
