@@ -178,21 +178,33 @@ const ProgramDetailPage = () => {
 
   const curriculum = program.detail?.curriculum || getCurriculum(program.type);
   const requirements =
-    program.detail?.requirements || getRequirements(program.type);
-  const applicantProfile = program.detail?.applicantProfile || [
-    "Profesional con título universitario en área afín.",
-    "Interés genuino por la investigación y la academia.",
-    "Capacidad de trabajo autónomo y en equipo.",
-    "Disposición para la actualización permanente.",
-    "Compromiso con el desarrollo regional y nacional.",
-  ];
-  const graduateProfile = program.detail?.graduateProfile || [
-    "Capacidad para liderar proyectos de investigación.",
-    "Competencias para la docencia universitaria.",
-    "Habilidades para la gestión del conocimiento.",
-    "Pensamiento crítico y analítico avanzado.",
-    "Visión estratégica y liderazgo institucional.",
-  ];
+    program.detail?.requirements?.length
+      ? program.detail.requirements
+      : getRequirements(program.type);
+  const applicantProfile =
+    program.detail?.applicantProfile?.length
+      ? program.detail.applicantProfile
+      : program.detail?.dirigidoA?.length
+        ? program.detail.dirigidoA
+        : [
+            "Profesional con título universitario en área afín.",
+            "Interés genuino por la investigación y la academia.",
+            "Capacidad de trabajo autónomo y en equipo.",
+            "Disposición para la actualización permanente.",
+            "Compromiso con el desarrollo regional y nacional.",
+          ];
+  const graduateProfile =
+    program.detail?.graduateProfile?.length
+      ? program.detail.graduateProfile
+      : program.detail?.perfiles?.length
+        ? program.detail.perfiles
+        : [
+            "Capacidad para liderar proyectos de investigación.",
+            "Competencias para la docencia universitaria.",
+            "Habilidades para la gestión del conocimiento.",
+            "Pensamiento crítico y analítico avanzado.",
+            "Visión estratégica y liderazgo institucional.",
+          ];
 
   const gradient = typeGradient[program.type] || typeGradient["Maestría"];
   const accent = typeAccent[program.type] || "#f1b434";
