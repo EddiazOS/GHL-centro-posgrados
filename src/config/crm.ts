@@ -17,10 +17,10 @@ export interface LeadPayload {
 }
 
 export const CRM_CONFIG = {
-  // URL del Webhook Inbound de GHL (configurable por variable de entorno o endpoint por defecto)
+  // URL del Webhook Inbound de GHL oficial de la subcuenta
   ghlWebhookUrl:
     import.meta.env.VITE_GHL_WEBHOOK_URL ||
-    "https://services.leadconnectorhq.com/hooks/inbound/posgrados-udc",
+    "https://services.leadconnectorhq.com/hooks/Y78ISaWU29ZinJJK5823/webhook-trigger/3127c87c-7d0b-46d0-b385-b856f26e60da",
   // Número oficial de WhatsApp Business de atención y admisiones (formato internacional sin signos)
   whatsappNumber: import.meta.env.VITE_WHATSAPP_NUMBER || "573164390360",
 };
